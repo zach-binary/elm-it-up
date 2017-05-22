@@ -1,0 +1,160 @@
+body {
+  font-family: 'Roboto', 'sans-serif';
+  font-size: 18px;
+  margin: 0;
+  color: #293c4b;
+}
+
+img {
+  margin: 20px 0;
+  max-width: 200px;
+}
+
+h1, h2 {
+  text-transform: uppercase;
+  color: #0053A3;
+  font-weight: 200;
+}
+
+h1 .fa {
+  padding: 0 5px;
+}
+
+h1 img {
+  width: 48px;
+  margin: 0;
+  margin-right: 5px;
+  display: inline-block;
+  float: left;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid lightblue;
+}
+
+.main {
+  padding: 5px;
+  max-width: 766px;
+  margin: 0 auto;
+}
+
+.main h1 {
+  margin: 0;
+}
+
+.main ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.account-list li {
+  padding: 5px;
+  border-bottom: 1px solid lightgray;
+  display: flex;
+  align-items: center;
+}
+
+.account-list li:first-child {
+  border-top: 1px solid lightgray;
+}
+
+.account-list .account {
+  display: inline-block;
+  width: 90%;
+}
+
+.account-list .actions {
+  width: 10%;
+  text-align: center;
+}
+
+.request-history {
+  padding: 5px;
+  border-top: 1px solid lightgray;
+  border-bottom: 1px solid lightgray;
+  display: flex;
+  align-items: center;
+}
+
+.request-history span {
+  width: 90%;
+}
+
+.request-history i {
+  width: 10%;
+  text-align: center;
+}
+
+.request-history, .account-list li {
+  cursor: pointer;
+}
+
+.request-history:active, .account-list li:active {
+  background: lightgray;
+}
+
+.deposit-options-modal {
+  padding: 5px;
+  box-sizing: border-box;
+}
+
+.deposit-options-modal ul li {
+  padding: 5px;
+}
+
+.deposit-options-modal .deposit-option {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.deposit-options-modal .deposit-option:active {
+  background: lightgray;
+}
+
+.deposit-options-modal img {
+  width: 48px;
+  height: 48px;
+  margin: 0;
+  margin-right: 5px;
+}
+
+.deposit-options-modal a {
+  text-decoration: none;
+  color: blue;
+}
+
+.deposit-options-modal a:active {
+  color: red;
+}
+
+.deposit-options-modal .dismiss {
+  font-weight: bold;
+  display: block;
+  margin: 5px 0;
+  text-align: center;
+}
+
+.deposit-options-modal .description {
+  font-size: 0.9rem;
+}
+
+.modal-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,.6);
+}
+
+.modal-wrapper > div {
+  position: relative;
+  background: white;
+  width: 100%;
+  max-width: 766px;
+  top: 25%;
+  margin: 0 auto;
+}
