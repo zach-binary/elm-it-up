@@ -80,7 +80,7 @@ view : Model -> Html Msg
 view model = 
     div [ class "main" ]
         [ h1 [] 
-          [ ripOffFundingDev "manageBankAcc_png.png" --i [ class "fa fa-usd" ] []
+          [ ripOffOwnSelf "manageBankAccounts.png" --i [ class "fa fa-usd" ] []
           , span [] [ text "Move Money" ]
           ]
         , hr [] []
@@ -150,16 +150,16 @@ depositOptionsModal model =
              [ h3 [] [ text "Where would you like to transfer from?" ]
              , ul [] 
                 [ li [] [ option "Bank via ACH Transfer (Preferred)" 
-                            "depositFunds_png.png" 
+                            "ach.png" 
                             "3 to 5 Business Days" ]
                 , li [] [ option "Another Tradestation Account" 
-                            "internalTransfer_png.png" 
+                            "internal.png" 
                             "Next Day (If placed before 12 p.m. ET today)" ]
                 , li [] [ option "Bank via Check Transfer" 
-                            "Check_png.png" 
+                            "checks.png" 
                             "Up to 3 Business Days" ]
                 , li [] [ option "Bank via Wire Transfer" 
-                            "wireTransfer_png.png" 
+                            "wireTransfer.png" 
                             "Next Business Day (if received before 4 p.m. ET today)" ]
                 , li [ onClick (ShowBrokerageOptions False) ] 
                   [ a [ class "dismiss", href "#" ] [ text "Dismiss" ] ]
@@ -170,7 +170,7 @@ depositOptionsModal model =
 option : String -> String -> String -> Html msg
 option labelText imgName description =
     div [ class "deposit-option" ] 
-    [ ripOffFundingDev imgName 
+    [ ripOffOwnSelf imgName 
     , div [] 
       [ strong [ ] [ text labelText ]
       , div [ class "description" ] [ text description ]
@@ -181,9 +181,9 @@ modalWrapper : Html Msg -> Html Msg
 modalWrapper modal =
     div [ class "modal-wrapper" ] [ modal ]
 
-ripOffFundingDev : String -> Html msg
-ripOffFundingDev imageName =
-    img [ src ("https://funding-dev.tradestation.io/images/" ++ imageName) ] []
+ripOffOwnSelf : String -> Html msg
+ripOffOwnSelf imageName =
+    img [ src ("https://elmitup.blob.core.windows.net/movemoney/images/" ++ imageName) ] []
 
 ---- PROGRAM ----
 
