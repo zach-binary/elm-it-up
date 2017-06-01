@@ -7,6 +7,11 @@ import Html.Attributes exposing (..)
 
 ---- MODEL ----
 
+type Page = MoveMoney 
+    | RequestHistory 
+    | BrokerageOptions 
+    | BankOptions
+    | ChooseBank
 
 type alias BrokerageAccount =
     { accountNumber: Int 
@@ -27,6 +32,7 @@ type alias Model =
     , bankAccounts: List BankAccount
     , showBrokerageOptions: Bool
     , showBankingOptions: Bool
+    , page: Page
     }
 
 
@@ -54,14 +60,15 @@ init path =
         , bankAccounts = bankAccounts
         , showBrokerageOptions = False
         , showBankingOptions = False
+        , page = MoveMoney
         }, Cmd.none 
     )
 
 ---- UPDATE ----
 
-
 type Msg = ShowBrokerageOptions Bool
     | ShowBankingOptions Bool
+    | ChangePage Page
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -73,31 +80,47 @@ update msg model =
         ShowBankingOptions toggle -> 
             ({ model | showBankingOptions = toggle }, Cmd.none)
 
+        ChangePage page ->
+            ({ model | page = page }, Cmd.none)
+
+
 ---- VIEW ----
 
 
 view : Model -> Html Msg
 view model = 
+    case model.page of
+        MoveMoney -> moveMoney model
+        BrokerageOptions -> brokerageOptions model
+        RequestHistory -> requestHistory model
+        BankOptions -> bankOptions model
+        ChooseBank -> chooseBank model
+
+moveMoney : Model -> Html Msg
+moveMoney model =
     div [ class "main" ]
         [ h1 [] 
-          [ ripOffOwnSelf "manageBankAccounts.png" --i [ class "fa fa-usd" ] []
-          , span [] [ text "Move Money" ]
+          [ span [] [ text "Move Money" ]
           ]
         , hr [] []
         , p  [] [ text "Select an account to move money into" ]
         , h2 [] [ text "Brokerage Accounts" ]
         , ul [ class "account-list" ] (List.map brokerageListItem model.brokerageAccounts)
-        , h2 [] [ text "Bank Accounts" ]
+        , h2 [] 
+            [ text "Bank Accounts" 
+            , span [ onClick (ChangePage BankOptions) ] [
+                i [ class "fa fa-cog" ] [] 
+            ]
+            ]
         , ul [ class "account-list" ] (bankList model.bankAccounts)
         , h2 [] [ text "Request History" ]
-        , requestHistory
-        , depositOptionsModal model
+        , requestHistoryListItem
         ]
         
 brokerageListItem : BrokerageAccount -> Html Msg
 brokerageListItem account =
-    li [ onClick (ShowBrokerageOptions True) ] 
-       [ div [ class "account" ] 
+    li [ onClick (ChangePage BrokerageOptions) ] 
+       [ div [ class "options" ] 
          [ div [] 
            [ strong [] [ text (account.accountType) ]
            ]
@@ -112,7 +135,7 @@ bankList: List BankAccount -> List (Html Msg)
 bankList bankAccounts =
     List.append (List.map bankListItem bankAccounts)
         [li [] 
-         [ div [ class "account" ] 
+         [ div [ class "options" ] 
            [ span [] [ text "Add a Bank Account" ]
            ]
          , div [ class "actions" ] 
@@ -123,7 +146,7 @@ bankList bankAccounts =
 bankListItem : BankAccount -> Html Msg
 bankListItem account =
      li [ onClick (ShowBankingOptions True) ] 
-       [ div [ class "account" ] 
+       [ div [ class "options" ] 
          [ div [] 
            [ strong [] [ text (account.bankName) ]
            ]
@@ -135,47 +158,89 @@ bankListItem account =
            [ i [ class "fa fa-chevron-right" ] [] ]
     ]
 
-requestHistory : Html Msg
-requestHistory =
-    div [ class "request-history" ]
-    [ span [] [ text "View Request History" ]
+requestHistoryListItem : Html Msg
+requestHistoryListItem =
+    div [ onClick (ChangePage RequestHistory)
+        , class "other-options" 
+        ]
+    [ span []
+        [ text "View Request History" ]
     , i [ class "fa fa-chevron-right" ] []
     ]
 
-depositOptionsModal : Model -> Html Msg
-depositOptionsModal model =
-    if model.showBrokerageOptions then 
-        modalWrapper 
-        (div [ class "deposit-options-modal" ]
-             [ h3 [] [ text "Where would you like to transfer from?" ]
-             , ul [] 
-                [ li [] [ option "Bank via ACH Transfer (Preferred)" 
-                            "ach.png" 
-                            "3 to 5 Business Days" ]
-                , li [] [ option "Another Tradestation Account" 
-                            "internal.png" 
-                            "Next Day (If placed before 12 p.m. ET today)" ]
-                , li [] [ option "Bank via Check Transfer" 
-                            "checks.png" 
-                            "Up to 3 Business Days" ]
-                , li [] [ option "Bank via Wire Transfer" 
-                            "wireTransfer.png" 
-                            "Next Business Day (if received before 4 p.m. ET today)" ]
-                , li [ onClick (ShowBrokerageOptions False) ] 
-                  [ a [ class "dismiss", href "#" ] [ text "Dismiss" ] ]
-                ]
-             ])
-    else (div [] [])
+return : Page -> Html Msg
+return page =
+    span [ onClick (ChangePage page) ]
+        [ i [ class "fa fa-chevron-left" ] []
+        , text "Back" ]
 
-option : String -> String -> String -> Html msg
-option labelText imgName description =
+brokerageOptions : Model -> Html Msg
+brokerageOptions model =
+    div [ class "brokerage-options" ]
+        [ h2 [] [ return MoveMoney ]
+        , h3 [] [ text "How would you like to move money?" ]
+        , ul [] 
+            [ li [ onClick (ChangePage ChooseBank) ]
+                 [ transferOption "Bank via ACH Transfer (Preferred)" 
+                        "ach.png" 
+                        "3 to 5 Business Days"
+                    , i [ class "fa fa-chevron-right" ] [] ]
+            , li [] [ transferOption "Another Tradestation Account" 
+                        "internal.png" 
+                        "Next Day (If placed before 12 p.m. ET today)"
+                    , i [ class "fa fa-chevron-right" ] [] ]                        
+            , li [] [ transferOption "Bank via Check Transfer" 
+                        "checks.png" 
+                        "Up to 3 Business Days"
+                    , i [ class "fa fa-chevron-right" ] [] ]                        
+            , li [] [ transferOption "Bank via Wire Transfer" 
+                        "wireTransfer.png" 
+                        "Next Business Day (if received before 4 p.m. ET today)"
+                    , i [ class "fa fa-chevron-right" ] [] ]                        
+            ]
+        ]
+
+requestHistory : Model -> Html Msg
+requestHistory model =
+    div [ class "request-history" ]
+        [ h2 [] [ return MoveMoney ]
+        , ul []
+        [ li [] [ text "Item 1" ]
+        , li [] [ text "Item 2" ]
+        ]
+        ]
+
+bankOptions : Model -> Html Msg
+bankOptions model =
+    div [ class "bank-options" ]
+        [ h2 [] [ return MoveMoney ]
+        , ul [ class "account-list" ] (bankList model.bankAccounts)
+        ]
+
+chooseBank : Model -> Html Msg
+chooseBank model =
+    div [ class "bank-options" ]
+        [ h2 [] [ return BrokerageOptions ]
+        , h3 [] [ text "Select an account to move money from" ]
+        , ul [ class "account-list" ] (bankList model.bankAccounts)
+        ]
+
+achTransfer : Model -> Html Msg
+achTransfer model =
+    div [ class "ach-transfer" ]
+        [ h2 [] [ return ChooseBank ]
+        , h3 [] [ text "Enter an amount to transfer" ]
+        ]
+
+transferOption : String -> String -> String -> Html msg
+transferOption labelText imgName description =
     div [ class "deposit-option" ] 
     [ ripOffOwnSelf imgName 
     , div [] 
       [ strong [ ] [ text labelText ]
       , div [ class "description" ] [ text description ]
       ]
-    ]
+    ]   
 
 modalWrapper : Html Msg -> Html Msg
 modalWrapper modal =

@@ -16,8 +16,13 @@ h1, h2 {
   font-weight: 200;
 }
 
-h1 .fa {
+h2 .fa {
   padding: 0 5px;
+  color: lightgray;
+}
+
+h2 .fa:hover {
+  color: #293c4b;
 }
 
 h1 img {
@@ -28,12 +33,16 @@ h1 img {
   float: left;
 }
 
+h1 {
+  text-align: center;
+}
+
 hr {
   border: none;
   border-top: 1px solid lightblue;
 }
 
-.main {
+.main, .brokerage-options, .request-history, .bank-options {
   padding: 5px;
   max-width: 766px;
   margin: 0 auto;
@@ -43,24 +52,24 @@ hr {
   margin: 0;
 }
 
-.main ul {
+body ul {
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
-.account-list li {
+.account-list li, .brokerage-options li {
   padding: 5px;
   border-bottom: 1px solid lightgray;
   display: flex;
   align-items: center;
 }
 
-.account-list li:first-child {
+.account-list li:first-child, .brokerage-options li:first-child {
   border-top: 1px solid lightgray;
 }
 
-.account-list .account {
+.account-list .options {
   display: inline-block;
   width: 90%;
 }
@@ -70,7 +79,7 @@ hr {
   text-align: center;
 }
 
-.request-history {
+.other-options {
   padding: 5px;
   border-top: 1px solid lightgray;
   border-bottom: 1px solid lightgray;
@@ -78,66 +87,61 @@ hr {
   align-items: center;
 }
 
-.request-history span {
+.other-options span, .deposit-option {
   width: 90%;
 }
 
-.request-history i {
+.other-options i {
   width: 10%;
   text-align: center;
 }
 
-.request-history, .account-list li {
+.other-options, .account-list li {
   cursor: pointer;
 }
 
-.request-history:active, .account-list li:active {
+.other-options:active, .account-list li:active, .brokerage-options li:active {
   background: lightgray;
 }
 
-.deposit-options-modal {
-  padding: 5px;
-  box-sizing: border-box;
-}
-
-.deposit-options-modal ul li {
+.brokerage-options ul li {
   padding: 5px;
 }
 
-.deposit-options-modal .deposit-option {
+.brokerage-options .deposit-option {
   display: flex;
   align-items: center;
   cursor: pointer;
 }
 
-.deposit-options-modal .deposit-option:active {
+.brokerage-options .deposit-option:active {
   background: lightgray;
 }
 
-.deposit-options-modal img {
+.brokerage-options img {
   width: 48px;
   height: 48px;
   margin: 0;
   margin-right: 5px;
 }
 
-.deposit-options-modal a {
+.brokerage-options a {
   text-decoration: none;
   color: blue;
 }
 
-.deposit-options-modal a:active {
+.brokerage-options a:active {
   color: red;
 }
 
-.deposit-options-modal .dismiss {
+.brokerage-options .dismiss {
   font-weight: bold;
   display: block;
   margin: 5px 0;
   text-align: center;
 }
 
-.deposit-options-modal .description {
+.brokerage-options .description {
   font-size: 0.9rem;
 }
 
