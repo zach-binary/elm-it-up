@@ -12,6 +12,7 @@ type Page = MoveMoney
     | BrokerageOptions 
     | BankOptions
     | ChooseBank
+    | TransferAmount
 
 type alias BrokerageAccount =
     { accountNumber: Int 
@@ -89,16 +90,19 @@ update msg model =
 
 view : Model -> Html Msg
 view model = 
-    case model.page of
+    let page = case model.page of
         MoveMoney -> moveMoney model
         BrokerageOptions -> brokerageOptions model
         RequestHistory -> requestHistory model
         BankOptions -> bankOptions model
         ChooseBank -> chooseBank model
+        TransferAmount -> achTransfer model
+     in
+        div [ class "main" ] [ page ] 
 
 moveMoney : Model -> Html Msg
 moveMoney model =
-    div [ class "main" ]
+    div [ class "move-money" ]
         [ h1 [] 
           [ span [] [ text "Move Money" ]
           ]
@@ -112,7 +116,7 @@ moveMoney model =
                 i [ class "fa fa-cog" ] [] 
             ]
             ]
-        , ul [ class "account-list" ] (bankList model.bankAccounts)
+        , ul [ class "account-list" ] (bankList (ChangePage BankOptions) model.bankAccounts)
         , h2 [] [ text "Request History" ]
         , requestHistoryListItem
         ]
@@ -131,9 +135,9 @@ brokerageListItem account =
            [ i [ class "fa fa-chevron-right" ] [] ]
     ]
 
-bankList: List BankAccount -> List (Html Msg)
-bankList bankAccounts =
-    List.append (List.map bankListItem bankAccounts)
+bankList: Msg -> List BankAccount -> List (Html Msg)
+bankList action bankAccounts =
+    List.append (List.map (bankListItem action) bankAccounts)
         [li [] 
          [ div [ class "options" ] 
            [ span [] [ text "Add a Bank Account" ]
@@ -143,9 +147,9 @@ bankList bankAccounts =
            ]
          ]]
 
-bankListItem : BankAccount -> Html Msg
-bankListItem account =
-     li [ onClick (ShowBankingOptions True) ] 
+bankListItem : Msg -> BankAccount -> Html Msg
+bankListItem action account =
+     li [ onClick (action) ] 
        [ div [ class "options" ] 
          [ div [] 
            [ strong [] [ text (account.bankName) ]
@@ -214,7 +218,7 @@ bankOptions : Model -> Html Msg
 bankOptions model =
     div [ class "bank-options" ]
         [ h2 [] [ return MoveMoney ]
-        , ul [ class "account-list" ] (bankList model.bankAccounts)
+        , ul [ class "account-list" ] (bankList (ChangePage TransferAmount) model.bankAccounts)
         ]
 
 chooseBank : Model -> Html Msg
@@ -222,7 +226,7 @@ chooseBank model =
     div [ class "bank-options" ]
         [ h2 [] [ return BrokerageOptions ]
         , h3 [] [ text "Select an account to move money from" ]
-        , ul [ class "account-list" ] (bankList model.bankAccounts)
+        , ul [ class "account-list" ] (bankList (ChangePage TransferAmount) model.bankAccounts)
         ]
 
 achTransfer : Model -> Html Msg
@@ -230,6 +234,12 @@ achTransfer model =
     div [ class "ach-transfer" ]
         [ h2 [] [ return ChooseBank ]
         , h3 [] [ text "Enter an amount to transfer" ]
+        , div [ class "transfer-amount" ]
+          [ input [ type_ "number", placeholder "Amount" ] []
+          , select [] 
+            [ option [] [ text "USD" ]
+            ]
+          ]
         ]
 
 transferOption : String -> String -> String -> Html msg

@@ -14,10 +14,14 @@ h1, h2 {
   text-transform: uppercase;
   color: #0053A3;
   font-weight: 200;
+  margin: 5px 0;
 }
 
 h2 .fa {
   padding: 0 5px;
+}
+
+h2 .fa-cog {
   color: lightgray;
 }
 
@@ -42,7 +46,7 @@ hr {
   border-top: 1px solid lightblue;
 }
 
-.main, .brokerage-options, .request-history, .bank-options {
+.main {
   padding: 5px;
   max-width: 766px;
   margin: 0 auto;
@@ -143,6 +147,25 @@ body ul {
 
 .brokerage-options .description {
   font-size: 0.9rem;
+}
+
+.transfer-amount {
+  display: flex;
+}
+
+.transfer-amount input {
+  padding: 10px;
+  border: 1px solid lightgray;
+  width: 70%;
+  font-size: 1.15rem;
+}
+
+.transfer-amount select {
+  padding: 10px;
+  border: 1px solid lightgray;
+  border-left: none;
+  font-size: 1.15rem;
+  border-radius: 0;
 }
 
 .modal-wrapper {
